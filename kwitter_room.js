@@ -1,3 +1,4 @@
+// Your web app's Firebase configuration
 var firebaseConfig = {
       apiKey: "AIzaSyC84LIPn0KOPt3h-Qojs_b0qApCc0WjIY0",
       authDomain: "letschatkwitterapp.firebaseapp.com",
@@ -6,26 +7,23 @@ var firebaseConfig = {
       storageBucket: "letschatkwitterapp.appspot.com",
       messagingSenderId: "136429234826",
       appId: "1:136429234826:web:01ff6fa1dfbb5188c41b73"
-};
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-// Initialize Firebase
-firebase.initializeApp();
 user_name = localStorage.getItem("user_name"); 
-document.getElementById("user_name").innerHTML = "Welcome " + user_name + "!";
+document.getElementById("user_name").innerHTML = "Welcome " + user_name + " !";
 
 function addRoom()
 {           
-      var existingItem = document.getElementById("output").innerHTML;
-      var room_name = document.getElementById("room_name").value;
-       //alert(room_name);
-      localStorage.setItem("room_name", room_name);
-      document.getElementById("output").innerHTML = existingItem + '<br>' + room_name;   
+      var roomName = document.getElementById("txtRoomName").value;
+      localStorage.setItem("roomName", roomName);
 
-      firebase.database().ref("/").child(room_name).update({
+      firebase.database().ref("/").child(roomName).update({
             purpose : "adding room name"
       });
 
-     //window.location = "kwitter_page.html";     
+      getData();   
 }
 
 function getData() 
@@ -36,8 +34,9 @@ function getData()
             snapshot.forEach(function(childSnapshot) 
             { 
                   childKey = childSnapshot.key; 
-                  Room_names = childKey; console.log("Room Name - " + Room_names); 
-                  row = "<div class='room_name' id="+Room_names+" onclick='redirectToRoomName(this.id)' >#"+ Room_names +"</div><hr>"; 
+                  roomName = childKey; 
+                  console.log("Room Name - " + roomName); 
+                  row = "<div class='room_name' id="+roomName+" onclick='redirectToRoomName(this.id)' >#"+ roomName +"</div><hr>"; 
                   document.getElementById("output").innerHTML += row; 
             }); 
       }); 
@@ -45,9 +44,15 @@ function getData()
 
 getData();
 
-function redirectToRoomName(name)
+function redirectToRoomName(roomName)
 {
-      console.log(name);
-      localStorage.setItem("room_name", name);
+      console.log(roomName);
+      localStorage.setItem("room_name" , roomName);
       window.location = "kwitter_page.html";
 }
+
+function logOut()
+{
+      window.location = "index.html";
+}
+
