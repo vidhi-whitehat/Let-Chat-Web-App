@@ -17,13 +17,20 @@ document.getElementById("user_name").innerHTML = "Welcome " + user_name + " !";
 function addRoom()
 {           
       var roomName = document.getElementById("txtRoomName").value;
-      localStorage.setItem("roomName", roomName);
+      if(roomName == '')
+      {
+          alert('Please enter Room Name !')
+      }
+      else
+      {
+            localStorage.setItem("roomName", roomName);
 
-      firebase.database().ref("/").child(roomName).update({
-            purpose : "adding room name"
-      });
+            firebase.database().ref("/").child(roomName).update({
+                  purpose : "adding room name"
+            });
 
-      getData();   
+            getData();   
+      }
 }
 
 function getData() 
